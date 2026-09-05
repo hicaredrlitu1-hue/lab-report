@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diagnostic Report - Hi-CARE</title>
+    <style>
+        @page {
+            size: letter;
+            margin-top: 2.2in;
+            margin-bottom: 2.0in;
+            margin-left: 2.3in;
+            margin-right: 1.2in;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
+        .patient-info {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        .patient-info td {
+            padding: 3px 0;
+            vertical-align: top;
+        }
+        .report-header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+            text-decoration: underline;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        .report-table th {
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+            text-align: left;
+            padding: 5px;
+            font-size: 12px;
+        }
+        .report-table td {
+            padding: 5px;
+            font-size: 12px;
+        }
+        .footer-signatures {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+        }
+        .sig-box {
+            width: 48%;
+            display: inline-block;
+            text-align: center;
+            font-size: 11px;
+        }
+        @media print {
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="no-print" style="margin-bottom: 10px;">
+        <button onclick="window.print()" style="padding: 8px 15px; background: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px;">Print Report</button>
+    </div>
+
+    <table class="patient-info">
+        <tr>
+            <td width="15%"><strong>ID No</strong></td>
+            <td width="35%">: {{ data.id_no }}</td>
+            <td width="20%"><strong>Inv. Date</strong></td>
+            <td width="30%">: {{ data.inv_date }}</td>
+        </tr>
+        <tr>
+            <td><strong>Patient Name</strong></td>
+            <td>: {{ data.name }}</td>
+            <td><strong>Printing Date</strong></td>
+            <td>: {{ data.print_date }}</td>
+        </tr>
+        <tr>
+            <td><strong>Age / Sex</strong></td>
+            <td>: {{ data.age }} / {{ data.gender }}</td>
+            <td><strong>Refd. By</strong></td>
+            <td>: {{ data.refd_by }}</td>
+        </tr>
+    </table>
+
+    <hr style="border: 0.5px solid #000; margin-bottom: 15px;">
+
+    {% if data.report_type == 'creatinine' %}
+        <div class="report-header">Serum Creatinine Examination</div>
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>TEST NAME</th>
+                    <th>RESULT</th>
+                    <th>UNIT</th>
+                    <th>NORMAL RANGE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Serum Creatinine</strong></td>
+                    <td><strong>{{ data.creatinine_val }}</strong></td>
+                    <td>{{ data.creatinine_unit }}</td>
+                    <td>{{ data.creatinine_range }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    {% elif data.report_type == 'crp' %}
+        <div class="report-header">C-Reactive Protein (CRP) Examination</div>
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>TEST NAME</th>
+                    <th>RESULT</th>
+                    <th>UNIT</th>
+                    <th>NORMAL RANGE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Serum CRP</strong></td>
+                    <td><strong>{{ data.crp_val }}</strong></td>
+                    <td>{{ data.crp_unit }}</td>
+                    <td>{{ data.crp_range }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    {% elif data.report_type == 'urine_routine' %}
+        <div class="report-header">Urine Routine Examination</div>
+        
+        <strong>Physical Examination:</strong>
+        <table class="report-table" style="margin-bottom: 10px;">
+            <tr><td width="30%">Quantity</td><td>: {{ data.physical.quantity }}</td></tr>
+            <tr><td>Color</td><td>: {{ data.physical.color }}</td></tr>
+            <tr><td>Appearance</td><td>: {{ data.physical.appearance }}</td></tr>
+        </table>
+
+        <strong>Chemical Examination:</strong>
+        <table class="report-table" style="margin-bottom: 10px;">
+            <tr><td width="30%">Reaction</td><td>: {{ data.chemical.reaction }}</td></tr>
+            <tr><td>Albumin</td><td>: {{ data.chemical.albumin }}</td></tr>
+            <tr><td>Sugar</td><td>: {{ data.chemical.sugar }}</td></tr>
+        </table>
+
+        <strong>Microscopic Examination:</strong>
+        <table class="report-table">
+            <tr><td width="30%">Pus Cells</td><td>: {{ data.microscopic.pus_cells }} /HPF</td></tr>
+            <tr><td>RBCs</td><td>: {{ data.microscopic.rbc }} /HPF</td></tr>
+            <tr><td>Epithelial Cells</td><td>: {{ data.microscopic.epithelial }} /HPF</td></tr>
+        </table>
+
+    {% elif data.report_type == 'urine_pregnancy' %}
+        <div class="report-header">Urine Pregnancy Test (UPT)</div>
+        <p style="font-size: 14px; margin-top: 20px;">
+            <strong>Result:</strong> <span style="font-size: 16px; font-weight: bold;">{{ data.pregnancy_result }}</span>
+        </p>
+
+    {% elif data.report_type == 'triple_antigen' %}
+        <div class="report-header">Widal / Triple Antigen Test</div>
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>ANTIGEN</th>
+                    <th>RESULT (Titre)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Salmonella Typhi 'O' (TO)</td><td>{{ data.widal_to }}</td></tr>
+                <tr><td>Salmonella Typhi 'H' (TH)</td><td>{{ data.widal_th }}</td></tr>
+                <tr><td>Salmonella Paratyphi 'AH'</td><td>{{ data.widal_ah }}</td></tr>
+                <tr><td>Salmonella Paratyphi 'BH'</td><td>{{ data.widal_bh }}</td></tr>
+            </tbody>
+        </table>
+
+    {% else %}
+        {% for sec in data.sections %}
+            <div class="report-header">{{ sec.title }}</div>
+            {% if sec.subtitle %}
+                <p style="font-size: 11px; font-style: italic; margin-top: -10px;">{{ sec.subtitle }}</p>
+            {% endif %}
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>TEST NAME</th>
+                        <th>RESULT</th>
+                        <th>UNIT</th>
+                        <th>NORMAL RANGE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in sec.tests %}
+                    <tr>
+                        <td><strong>{{ t.name }}</strong></td>
+                        <td><strong>{{ t.result }}</strong></td>
+                        <td>{{ t.unit }}</td>
+                        <td>{{ t.range }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% endif %}
+
+    <div class="footer-signatures">
+        <div class="sig-box">
+            <br><br>
+            __________________________<br>
+            <strong>{{ data.lab_incharge }}</strong>
+        </div>
+        <div class="sig-box">
+            <br><br>
+            __________________________<br>
+            <strong>{{ data.pathologist }}</strong>
+        </div>
+    </div>
+
+</body>
+</html>
