@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>Hi-CARE Diagnostic Data Entry</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 15px; background-color: #f0f4f8; }
+        .form-card { max-width: 950px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        label { font-weight: bold; font-size: 13px; display: block; margin-top: 8px; }
+        input, select { width: 100%; padding: 6px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .section-box { border: 1px solid #007bff; padding: 12px; border-radius: 6px; margin-top: 15px; background: #fafafa; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 5px; }
+        .btn { background: #28a745; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 4px; font-size: 16px; margin-top: 15px; width: 100%; }
+        .btn-add { background: #007bff; width: auto; margin-top: 8px; font-size: 12px; }
+        .tab-sec { display: none; }
+        .active-sec { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="form-card">
+    <h2>Hi-CARE Digital Diagnostic Lab - Report Management</h2>
+    
+    <form action="/" method="POST">
+        <label>টেস্টের নাম সিলেক্ট করুন (Choose Report Category):</label>
+        <select id="report_type" name="report_type" onchange="switchTemplate()">
+            <option value="creatinine">Serum Creatinine Report</option>
+            <option value="crp">CRP (C-Reactive Protein) Report</option>
+            <option value="urine_routine">Urine Routine Examination</option>
+            <option value="urine_pregnancy">Urine Pregnancy Test (UPT)</option>
+            <option value="triple_antigen">Triple Antigen / Widal Test</option>
+            <option value="general">Custom Multi-Section (Biochemistry / Others)</option>
+        </select>
+
+        <hr style="margin: 15px 0;">
+
+        <div class="grid-3">
+            <div><label>ID No:</label><input type="text" name="id_no" value="707" required></div>
+            <div><label>Inv Date:</label><input type="text" name="inv_date" value="01-May-25"></div>
+            <div><label>Printing Date:</label><input type="text" name="print_date" value="01-May-25"></div>
+        </div>
+
+        <div class="grid-3">
+            <div><label>Patient Name:</label><input type="text" name="name" value="Mrs. Farzana" required></div>
+            <div><label>Age:</label><input type="text" name="age" value="20 Yrs"></div>
+            <div>
+                <label>Gender:</label>
+                <select name="gender">
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                </select>
+            </div>
+        </div>
+
+        <label>Refd. By:</label>
+        <input type="text" name="refd_by" value="Dr. Nazmus Sakib (Bright) MBBS. MD (Oncology)">
+
+        <div id="creatinine_sec" class="tab-sec active-sec">
+            <h3>Serum Creatinine Examination</h3>
+            <div class="grid-3">
+                <div><label>Result Value:</label><input type="text" name="creatinine_val" value="0.95"></div>
+                <div><label>Unit:</label><input type="text" name="creatinine_unit" value="mg/dl"></div>
+                <div><label>Normal Range:</label><input type="text" name="creatinine_range" value="0.55 - 1.30"></div>
+            </div>
+        </div>
+
+        <div id="crp_sec" class="tab-sec">
+            <h3>C-Reactive Protein (CRP)</h3>
+            <div class="grid-3">
+                <div><label>Result Value:</label><input type="text" name="crp_val" value="5.2"></div>
+                <div><label>Unit:</label><input type="text" name="crp_unit" value="mg/l"></div>
+                <div><label>Normal Range:</label><input type="text" name="crp_range" value="< 6.0"></div>
+            </div>
+        </div>
+
+        <div id="urine_sec" class="tab-sec">
+            <h3>Urine Routine Examination</h3>
+            <div class="grid-3">
+                <div><label>Color:</label><input type="text" name="u_color" value="Straw"></div>
+                <div><label>Appearance:</label><input type="text" name="u_appearance" value="Clear"></div>
+                <div><label>Quantity:</label><input type="text" name="u_quantity" value="Sufficient"></div>
+            </div>
+            <div class="grid-3">
+                <div><label>Reaction:</label><input type="text" name="u_reaction" value="Acidic"></div>
+                <div><label>Albumin:</label><input type="text" name="u_albumin" value="Nil"></div>
+                <div><label>Sugar:</label><input type="text" name="u_sugar" value="Nil"></div>
+            </div>
+        </div>
+
+        <div id="pregnancy_sec" class="tab-sec">
+            <h3>Urine Pregnancy Test</h3>
+            <label>Result:</label>
+            <select name="pregnancy_result">
+                <option value="Positive">Positive</option>
+                <option value="Negative" selected>Negative</option>
+            </select>
+        </div>
+
+        <div id="triple_sec" class="tab-sec">
+            <h3>Widal / Triple Antigen Test</h3>
+            <div class="grid-2">
+                <div><label>TO:</label><input type="text" name="widal_to" value="1:80"></div>
+                <div><label>TH:</label><input type="text" name="widal_th" value="1:80"></div>
+                <div><label>AH:</label><input type="text" name="widal_ah" value="1:80"></div>
+                <div><label>BH:</label><input type="text" name="widal_bh" value="1:80"></div>
+            </div>
+        </div>
+
+        <div id="general_sec" class="tab-sec">
+            <div id="sections_container">
+                <div class="section-box" id="sec_0">
+                    <label>Section Header Title:</label>
+                    <input type="text" name="sec_title[]" value="Biochemical Test Report">
+                    
+                    <label>Subtitle / Analyzer Info (Optional):</label>
+                    <input type="text" name="sec_subtitle[]" value="Analyzed using Microlab 300">
+
+                    <table id="table_0">
+                        <thead>
+                            <tr><th>TEST NAME</th><th>RESULT</th><th>UNIT</th><th>NORMAL RANGE</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="test_name_0[]" value="SGPT"></td>
+                                <td><input type="text" name="result_0[]" value="11"></td>
+                                <td><input type="text" name="unit_0[]" value="U/ml"></td>
+                                <td><input type="text" name="normal_range_0[]" value="< 40"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-add" onclick="addRow(0)">+ Add Row</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:15px;">
+            <div><label>Lab In-Charge Signature Line:</label><input type="text" name="lab_incharge" value="Lab In-Charge (Hi-CARE Lab, Satkhira)"></div>
+            <div><label>Pathologist Signature Line:</label><input type="text" name="pathologist" value="Pathologist (MBBS, Trained In Pathology)"></div>
+        </div>
+
+        <button type="submit" class="btn">Generate & Print Report</button>
+    </form>
+</div>
+
+<script>
+function switchTemplate() {
+    var type = document.getElementById('report_type').value;
+    
+    document.getElementById('creatinine_sec').className = (type === 'creatinine') ? 'tab-sec active-sec' : 'tab-sec';
+    document.getElementById('crp_sec').className = (type === 'crp') ? 'tab-sec active-sec' : 'tab-sec';
+    document.getElementById('urine_sec').className = (type === 'urine_routine') ? 'tab-sec active-sec' : 'tab-sec';
+    document.getElementById('pregnancy_sec').className = (type === 'urine_pregnancy') ? 'tab-sec active-sec' : 'tab-sec';
+    document.getElementById('triple_sec').className = (type === 'triple_antigen') ? 'tab-sec active-sec' : 'tab-sec';
+    document.getElementById('general_sec').className = (type === 'general') ? 'tab-sec active-sec' : 'tab-sec';
+}
+
+function addRow(secIndex) {
+    var table = document.getElementById("table_" + secIndex).getElementsByTagName('tbody')[0];
+    var row = table.insertRow(-1);
+    row.innerHTML = '<td><input type="text" name="test_name_' + secIndex + '[]"></td>' +
+                    '<td><input type="text" name="result_' + secIndex + '[]"></td>' +
+                    '<td><input type="text" name="unit_' + secIndex + '[]"></td>' +
+                    '<td><input type="text" name="normal_range_' + secIndex + '[]"></td>';
+}
+</script>
+
+</body>
+</html>
